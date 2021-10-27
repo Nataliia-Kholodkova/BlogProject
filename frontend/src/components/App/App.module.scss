@@ -1,0 +1,33 @@
+.container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: flex-start;
+
+  @media screen and(min-width: 768px) {
+    justify-content: flex-start;
+  }
+}
+
+.main {
+  padding: 20px 10px;
+  display: flex;
+  width: 84%;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  min-height: 170px;
+  transform: translateX(0);
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+
+  @media screen and(min-width: 768px) {
+    width: 67%;
+  }
+
+  @media screen and(min-width: 768px) {
+    width: 85%;
+  }
+}

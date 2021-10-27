@@ -1,0 +1,141 @@
+@import '../../../mixins.scss';
+@import '../../../variables.scss';
+
+.form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  box-shadow: 1px 1px 10px rgba($bgColorDark, 0.3);
+}
+
+.inputForText {
+  width: 100%;
+  padding: 5px;
+  border-bottom: 1px solid $bgColorDark;
+  color: $fontColorDark;
+  @extend %transition;
+
+  &::placeholder {
+    color: $fontColorDark;
+  }
+
+  &.error {
+    border-bottom-color: $colorPink;
+  }
+}
+
+.labelForText {
+  width: 100%;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.errorSpan {
+  color: $colorPink;
+  @include fontView(10px);
+  font-style: italic;
+}
+
+.labelForRadio {
+  @extend %reset;
+  margin-bottom: 15px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.title {
+  margin-left: 5px;
+  flex-grow: 1;
+}
+
+.inputForRadio {
+  & + .inputIco {
+    @extend %reset;
+    position: relative;
+    display: block;
+    width: 26px;
+    height: 26px;
+    border: 1px solid rgba($bgColorDark, 0.6);
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    @extend %transition;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+      content: '';
+      display: block;
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgba($bgColorDark, 0.6);
+      background-color: rgba($bgColorDark, 0.3);
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+      @extend %transition;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    & + .inputIco {
+      border-color: $bgColorDark;
+
+      &::after {
+        border-color: $bgColorDark;
+        background-color: $bgColorDark;
+      }
+    }
+  }
+
+  &:checked {
+    & + .inputIco {
+      border-color: $bgColorDark;
+      &::after {
+        border-color: $bgColorDark;
+        background-color: $bgColorDark;
+      }
+    }
+  }
+}
+
+.custom-file-input::-webkit-file-upload-button {
+  display: none;
+}
+.custom-file-input::before {
+  content: 'Select some files';
+  display: inline-block;
+  margin-bottom: 15px;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+  @extend %transition;
+}
+.custom-file-input:hover::before {
+  border-color: $bgColorDark;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}

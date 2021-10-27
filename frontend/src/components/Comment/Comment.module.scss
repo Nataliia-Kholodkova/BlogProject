@@ -1,0 +1,109 @@
+@import '../../mixins.scss';
+@import '../../variables.scss';
+
+.comment {
+    width: 65%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    align-self: flex-end;
+    margin-right: 10px;
+    background-color: $bgColorLight;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.commentUser, .commentContent {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+}
+
+.commentUser {
+  align-items: center;
+}
+
+.commentContent {
+  flex-wrap: wrap;
+}
+
+.userImageContainer {
+  width: 100px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  overflow: hidden;
+  @extend %transition;
+}
+
+.userTitle {
+  @extend %reset;
+  text-decoration: none;
+  margin-bottom: 3px;
+  @include fontView($fontSize: 18px,$fontWeight: 700);
+  color: $fontColorDark;
+  @extend %transition;
+}
+
+.date {
+  @extend %reset;
+  @include fontView($fontSize: 12px, $fontWeight: 300);
+  font-style: italic;
+}
+
+.userInfoContainer {
+  flex-grow: 0;
+  margin-left: 10px;
+  cursor: pointer;
+
+  &:hover {
+    & .userTitle {
+      color: $colorPink;
+    }
+  }
+}
+
+.commentBodyContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 0;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+
+  @media screen and (min-width: 479px) {
+    width: 60%;
+    padding: 0 10px;
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 100%
+  }
+}
+
+.commentText {
+  @extend %reset;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  button:first-of-type{
+    margin-right: 15px;
+  }
+}

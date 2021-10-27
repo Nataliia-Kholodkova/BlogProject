@@ -1,0 +1,33 @@
+%reset {
+  margin: 0;
+  padding: 0;
+}
+
+%link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+%list {
+  list-style: none;
+}
+
+%transition {
+  transition: 0.3s linear;
+  -webkit-transition: 0.3s linear;
+  -moz-transition: 0.3s linear;
+  -ms-transition: 0.3s linear;
+  -o-transition: 0.3s linear;
+}
+
+@mixin fontView($fontSize: 14px, $fontWeight: 400) {
+  font-size: $fontSize;
+  font-weight: $fontWeight;
+}
+
+@mixin fontStyle($textTransform: none, $textDecoration: none) {
+  text-decoration: $textDecoration;
+  text-transform: $textTransform;
+}
+

@@ -1,0 +1,68 @@
+@import '../../../variables.scss';
+@import '../../../mixins.scss';
+
+.preloaderImage {
+  width: 100px;
+}
+
+.userImageRoundSmall,
+.postImageRect,
+.userImgBig {
+  object-fit: cover;
+}
+
+.userImageRoundSmall,
+.userImgBig {
+  width: 100%;
+}
+
+.postImageRect,
+.userImgBig {
+  @extend %transition;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+
+  &:hover {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+  }
+}
+
+.likesImg {
+  width: 16px;
+  height: 16px;
+  fill: $colorPink;
+}
+
+.like {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  fill: $bgColorLight;
+  cursor: pointer;
+  @extend %transition;
+
+  &:hover {
+    fill: $colorPink;
+    & + span {
+      color: $colorPink;
+    }
+  }
+}
+
+.liked {
+  fill: $colorPink;
+
+  &:hover {
+    fill: $bgColorLight;
+    & + span {
+      color: $bgColorLight;
+    }
+  }
+}

@@ -1,0 +1,93 @@
+@import '../../mixins.scss';
+@import '../../variables.scss';
+
+.header {
+  position: sticky;
+  top: 0;
+  min-height: 60px;
+  height: auto;
+  background-color: $bgColorDark;
+  z-index: 2;
+  @extend %transition;
+
+  @media screen and (min-width: 489px) {
+    padding: 10px;
+  }
+}
+
+nav {
+  @extend %transition;
+}
+
+.navList {
+  @extend %reset;
+  @extend %list;
+  position: absolute;
+  padding: 0 20px;
+  top: -900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background-color: $bgColorDark;
+  @extend %transition;
+
+  @media screen and (min-width: 489px) {
+    position: static;
+    width: 80%;
+    flex-direction: row;
+    padding: 0;
+  }
+
+  @media screen and (min-width: 789px) {
+    width: 60%;
+  }
+
+  &.open {
+    top: 0;
+  }
+}
+
+.navItem {
+  width: fit-content;
+  padding: 10px;
+
+  @media screen and (min-width: 489px) {
+    padding: 0 10px;
+  }
+}
+
+.navLink {
+  @extend %link;
+  position: relative;
+  padding-bottom: 4px;
+  color: $fontColorWhite;
+  border-bottom: 1px solid transparent;
+  @include fontView(16px, 500);
+  @extend %transition;
+
+  &:hover,&:focus {
+      border-bottom-color: $fontColorWhite;
+  }
+
+  &:active {
+    border-bottom-color: rgba($fontColorWhite, 0.5);
+    color: rgba($fontColorWhite, 0.5);
+  }
+}
+
+.active {
+  color: $colorPink;
+  border-bottom-color: $colorPink;
+
+  &:hover, &:focus {
+    color: $colorPink;
+    border-bottom-color: $colorPink;
+  }
+
+  &:active {
+    border-bottom-color: rgba($colorPink, 0.5);
+    color: rgba($colorPink, 0.5);
+  }
+}

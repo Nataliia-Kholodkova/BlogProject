@@ -1,0 +1,61 @@
+@import '../../mixins.scss';
+@import '../../variables.scss';
+
+.user {
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 1px 1px 10px rgba($bgColorDark, 0.3);
+  margin-bottom: 30px;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 1px 1px 10px rgba($bgColorDark, 0.7);
+  }
+
+  @media screen and(min-width: 478px) {
+    width: 46%;
+  }
+
+  @media screen and(min-width: 960px) {
+    width: 30%;
+  }
+
+  @media screen and(min-width: 960px) {
+    width: 30%;
+  }
+}
+
+.userImageContainer {
+  width: 100px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  overflow: hidden;
+  @extend %transition;
+}
+
+.userTitle {
+  @extend %reset;
+  margin-bottom: 10px;
+  @include fontView($fontSize: 18px, $fontWeight: 700);
+  color: $fontColorDark;
+  text-align: center;
+  text-decoration: none;
+  @extend %transition;
+
+  &:hover,
+  &:focus {
+    color: $colorPink;
+  }
+}

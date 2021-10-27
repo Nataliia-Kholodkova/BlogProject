@@ -1,0 +1,96 @@
+@import '../../mixins.scss';
+@import '../../variables.scss';
+
+.user {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 1px 1px 10px rgba($bgColorDark, 0.3);
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: white;
+
+  &:hover {
+    box-shadow: 1px 1px 10px rgba($bgColorDark, 0.7);
+  }
+}
+
+.userImageContainer {
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  overflow: hidden;
+  @extend %transition;
+
+  @media screen and (min-width: 468px) {
+    width: 55%;
+  }
+
+  @media screen and (min-width: 769px) {
+    width: 40%;
+  }
+}
+
+.userTitle {
+  @extend %reset;
+  margin-bottom: 3px;
+  @include fontView($fontSize: 18px, $fontWeight: 700);
+  color: $fontColorDark;
+  text-align: center;
+}
+
+.city {
+  @extend %reset;
+  margin-bottom: 3px;
+  @include fontView($fontSize: 14px, $fontWeight: 300);
+  text-align: center;
+}
+
+.date {
+  @extend %reset;
+  @include fontView($fontSize: 12px, $fontWeight: 300);
+  font-style: italic;
+  text-align: center;
+}
+
+.btnGood {
+  padding: 5px 10px;
+  background-color: white;
+  text-align: center;
+  border: 2px solid;
+  text-decoration: none;
+  @extend %transition;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+.btnGood {
+  border-color: rgba($colorPink, 0.5);
+
+  &:hover,
+  &:focus {
+    border-color: $colorPink;
+  }
+}
+
+.buttonsContainer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  a:first-of-type{
+    margin-right: 15px;
+  }
+}
