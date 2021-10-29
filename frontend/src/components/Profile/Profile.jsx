@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Image from '../Common/Image/Image';
-import styles from './Profile.module.css';
 import Preloader from '../Common/Preloader/Preloader';
 import { AuthContext } from '../../context/userAuthContext';
 import avatarMale from '../../assets/avatar_male.png';
 import avatarFeale from '../../assets/avatar_female.png';
+import styles from './Profile.module.css';
 
 const Profile = ({ user, isLoad }) => {
   const { currentUser } = useContext(AuthContext);
@@ -35,22 +35,38 @@ const Profile = ({ user, isLoad }) => {
           <h1 className={styles.userTitle}>{`${firstName} ${lastName}`}</h1>
           {country && (
           <>
-            <p className={styles.city}>{`${country}, ${state}`}</p>
-            {currentUser && (
-            <>
-              <p className={styles.city}>{`${city}, ${pageUser?.street?.name}, ${pageUser?.street?.number}`}</p>
-              <p className={styles.city}>{`Email: ${email}`}</p>
-              <p className={styles.city}>{`Phone: ${phone}`}</p>
-              <p className={styles.city}>{`Cell: ${cell}`}</p>
-            </>
-            )}
+            <div className={styles.contactGroup}>
+              <i className={`fas fa-map-marker-alt ${styles.far}`} />
+              <span className={styles.city}>
+                {`${country}, ${state}`}
+                {`${city}, ${pageUser?.street?.name} ${pageUser?.street?.number ?? ''}`}
+              </span>
+            </div>
+            <div className={styles.contactGroup}>
+              <i className={`far fa-envelope ${styles.far}`} />
+              <span className={styles.city}>
+                {`${email}`}
+              </span>
+            </div>
+            <div className={styles.contactGroup}>
+              <i className={`fas fa-phone-volume ${styles.far}`} />
+              <span className={styles.city}>
+                {`${phone}`}
+              </span>
+            </div>
+            <div className={styles.contactGroup}>
+              <i className={`fas fa-mobile-alt ${styles.far}`} />
+              <span className={styles.city}>
+                {`${cell}`}
+              </span>
+            </div>
           </>
           )}
         </div>
         {pageUser._id === currentUser?._id && (
         <div className={styles.buttonsContainer}>
-          <Link className={styles.btnGood} to="me/update">Edit Profile</Link>
-          <Link className={styles.btnGood} to="me/update/password">Change Password</Link>
+          <Link className={styles.btnGood} to="/me/update">Edit Profile</Link>
+          <Link className={styles.btnGood} to="/me/update/password">Change Password</Link>
         </div>
         )}
       </div>

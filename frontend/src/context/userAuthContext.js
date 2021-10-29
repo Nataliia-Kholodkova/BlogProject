@@ -4,7 +4,6 @@ import { getMe } from '../utils/processData';
 
 const AuthContext = createContext();
 
-// eslint-disable-next-line react/prop-types
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [logedIn, setLogedIn] = useState(false);

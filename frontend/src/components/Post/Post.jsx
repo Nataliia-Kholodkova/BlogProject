@@ -1,24 +1,29 @@
-import React, { useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import styles from './Post.module.css';
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Image from '../Common/Image/Image';
 import Tags from '../UI/Tags/Tags';
 import Like from '../Common/Image/Like';
-import { AuthContext } from '../../context/userAuthContext';
 import Button from '../UI/Button/Button';
 import avatarMale from '../../assets/avatar_male.png';
 import avatarFemale from '../../assets/avatar_female.png';
+import noImg from '../../assets/no_image.png';
+import { fetchUpdateLike } from '../../utils/dataFunctions';
+import { deletePost } from '../../utils/processData';
+import PostCreateUpdate from '../Pages/PostCreateUpdate';
+import Modal from '../UI/Modal/Modal';
+import { AuthContext } from '../../context/userAuthContext';
+import styles from './Post.module.css';
 
 const Post = ({ children, ...props }) => {
   const {
     post,
-    filter,
-    setFilter,
-    updateLikeHandler,
-    deletePost,
+    tag,
+    setTag,
     setPost,
-    showButtons,
     isSingle,
+    setPosts,
+    setError,
+    setReset,
   } = props;
   const {
     ownerUid,
@@ -26,15 +31,19 @@ const Post = ({ children, ...props }) => {
     _id,
     user,
   } = post;
-  const hist = useHistory();
   const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(false);
+  const [btnDisabled, setBtntDisabled] = useState(false);
   const isLiked = currentUser?.likedPosts
     .find((currentPost) => currentPost === post._id);
   const onTagClick = (event, tagName) => {
     event.stopPropagation();
-    setFilter({ ...filter, tagName });
+    if (tag === tagName) {
+      setTag('');
+    } else {
+      setTag(tagName);
+    }
   };
-
   return (
     <div
       className={`${styles.post} ${isSingle ? styles.single : ''}`}
@@ -44,7 +53,7 @@ const Post = ({ children, ...props }) => {
       >
         <div className={styles.userImageContainer}>
           <Image
-            src={user?.picture?.large ?? user?.picture ?? (user.gender === 'female' ? avatarFemale : avatarMale)}
+            src={user?.picture?.large ?? user?.picture ?? (user?.gender === 'female' ? avatarFemale : avatarMale)}
             alt={`${user.firstName} ${user.lastName}`}
             className="userImageRoundSmall"
             circle
@@ -61,7 +70,7 @@ const Post = ({ children, ...props }) => {
       </div>
       <div className={styles.postContent}>
         <div className={styles.postImgContainer}>
-          <Image src={image} alt="Post image" className="postImageRect" />
+          <Image src={image ?? noImg} alt="Post image" className="postImageRect" />
           <div className={styles.likesContainer}>
             <a
               href="/"
@@ -70,18 +79,13 @@ const Post = ({ children, ...props }) => {
                 if (ownerUid === currentUser._id) {
                   return false;
                 }
-                const like = isLiked ? -1 : 1;
-                let likedPosts = [...currentUser.likedPosts];
-                updateLikeHandler(post._id, like);
-                if (!isLiked) {
-                  likedPosts.push(post._id);
-                } else {
-                  likedPosts = likedPosts.filter((currentPost) => currentPost !== post._id);
+                const likedPosts = [...currentUser.likedPosts];
+                try {
+                  await fetchUpdateLike(post, isLiked, likedPosts, currentUser,
+                    setCurrentUser, setError, setPost, setPosts);
+                } catch {
+                  return false;
                 }
-                if (setPost) {
-                  setPost({ ...post, likes: likes + like });
-                }
-                setCurrentUser({ ...currentUser, likedPosts });
                 return true;
               }}
             >
@@ -95,37 +99,53 @@ const Post = ({ children, ...props }) => {
           <Tags
             tagList={tags}
             onClick={onTagClick}
-            itemStyle="tagItemSmall"
-            linkStyle="tagLinkSmall"
+            currentTag={tag}
           />
         </div>
-        {currentUser?._id === ownerUid && showButtons && (
+        {currentUser?._id === ownerUid && (
           <div className={styles.buttonsContainer}>
             <Button
               onClick={() => {
-                hist.push(`/posts/update/${_id}`);
+                setShowModal(true);
               }}
-              className="btnGood"
               type="button"
+              disabled={btnDisabled}
             >
-              Update
+              <i className={`far fa-edit ${styles.farEdit}`} />
             </Button>
             <Button
               onClick={
-              async () => {
-                await deletePost(_id);
-                hist.push('/posts');
-              }
+                async () => {
+                  if (btnDisabled) {
+                    return;
+                  }
+                  try {
+                    setBtntDisabled(true);
+                    await deletePost(_id);
+                    if (setPosts) {
+                      setPosts((oldPosts) => oldPosts.filter((p) => p._id !== post._id));
+                    }
+                    setBtntDisabled(false);
+                  } catch {
+                    setError('Something went wrong');
+                    setBtntDisabled(false);
+                  }
+                }
           }
-              className="btnDelete"
               type="button"
+              disabled={btnDisabled}
             >
-              Delete
+              <i className={`far fa-trash-alt ${styles.farDelete}`} />
             </Button>
           </div>
         )}
       </div>
       {children || null}
+      {showModal && (
+      <Modal setShowModal={setShowModal}>
+        <PostCreateUpdate formClassName="columnForm" currentPost={post} setReset={setReset} />
+      </Modal>
+      )}
     </div>
   );
 };

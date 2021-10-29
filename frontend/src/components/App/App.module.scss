@@ -1,19 +1,24 @@
+@import '../../variables.scss';
+
 .container {
   position: relative;
   display: flex;
-  width: 100%;
-  justify-content: flex-end;
-  align-items: flex-start;
+  width: 90%;
+  padding: 10px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+
 
   @media screen and(min-width: 768px) {
     justify-content: flex-start;
+    align-items: flex-start;
   }
 }
 
 .main {
-  padding: 20px 10px;
+  padding: 20px 0;
   display: flex;
-  width: 84%;
+  width: 100%;
   flex-wrap: wrap;
   justify-content: space-evenly;
   min-height: 170px;
@@ -23,11 +28,13 @@
   -ms-transform: translateX(0);
   -o-transform: translateX(0);
 
-  @media screen and(min-width: 768px) {
-    width: 67%;
+  @media screen and (min-width: 960px) {
+    width: 75%;
   }
+}
 
-  @media screen and(min-width: 768px) {
-    width: 85%;
-  }
+.createContainer {
+  width: 100%;
+  margin-bottom: 5px;
+  border-bottom: 1px solid $borderColorGrey;
 }

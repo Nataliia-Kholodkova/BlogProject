@@ -1,20 +1,40 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 import styles from './Aside.module.css';
-import PostFilter from '../PostFilter/PostFilter';
-import Button from '../UI/Button/Button';
-import Arrow from '../Common/Image/Arrow';
 
-const Aside = ({ filter, setFilter }) => {
-  const ref = useRef(null);
-  const toggleClassRef = () => ref.current.classList.toggle(styles.open);
-  return (
-    <aside className={styles.aside} ref={ref}>
-      <Button onClick={toggleClassRef} className="arrowButton" type="button" isMobile>
-        <Arrow />
-      </Button>
-      <PostFilter filter={filter} setFilter={setFilter} />
-    </aside>
-  );
-};
+const Aside = ({ currentUser }) => (
+  <aside className={styles.aside}>
+    <ul className={styles.navList}>
+      <li className={styles.navItem}>
+        <NavLink className={styles.navLink} activeClassName={styles.active} to="/posts">
+          <i className={`far fa-address-book ${styles.far}`} />
+          Posts
+        </NavLink>
+      </li>
+      <li className={styles.navItem}>
+        <NavLink className={styles.navLink} activeClassName={styles.active} to="/users">
+          <i className={`fas fa-users ${styles.far}`} />
+          Users
+        </NavLink>
+      </li>
+      {currentUser && (
+      <>
+        <li className={styles.navItem}>
+          <NavLink className={styles.navLink} activeClassName={styles.active} to="/posts/me/liked">
+            <i className={`far fa-heart ${styles.far}`} />
+            Favourite posts
+          </NavLink>
+        </li>
+        <li className={styles.navItem}>
+          <NavLink className={styles.navLink} activeClassName={styles.active} to="/users/me/followed">
+            <i className={`far fa-kiss-wink-heart ${styles.far}`} />
+            Followed users
+          </NavLink>
+        </li>
+      </>
+      )}
+    </ul>
+  </aside>
+);
 
 export default Aside;

@@ -14,6 +14,18 @@ const getPosts = async (request, response) => {
   }
 };
 
+const getLikedPosts = async (request, response) => {
+  const { limit, skip } = request.query;
+  try {
+    const user = await User.findById(request.userId);
+    const posts = await Post.find({ _id: { $in: user.likedPosts } }).sort([['publishDate', -1]]).limit(+limit ?? 0).skip(+skip ?? 0) ?? [] ?? [];
+    const mappedPosts = await addUserToPost(posts);
+    response.status(200).json({ posts: mappedPosts });
+  } catch (error) {
+    response.status(400).json({ message: error.message }).end();
+  }
+};
+
 const getUsersPosts = async (request, response) => {
   const { limit, skip } = request.query;
   const { id } = request.params;
@@ -40,7 +52,9 @@ const createPost = async (request, response) => {
       post.image = image;
     }
     await post.save();
-    response.status(200).json({ post });
+    const user = await User.findById(post.ownerUid);
+    const comments = await getComments(post);
+    response.status(200).json({ post: { ...post._doc, user, comments } });
   } catch (error) {
     response.status(400).json({ message: error.message }).end();
   }
@@ -65,9 +79,15 @@ const updatePost = async (request, response) => {
     image, tags, text,
   } = request.body;
   const { id } = request.params;
+  const updates = { tags, text };
+  if (image) {
+    updates.image = image;
+  }
   try {
-    const post = await Post.findOneAndUpdate({ _id: id }, { image, tags, text }, { new: true });
-    response.status(200).json({ post });
+    const post = await Post.findOneAndUpdate({ _id: id }, updates, { new: true });
+    const user = await User.findById(post.ownerUid);
+    const comments = await getComments(post);
+    response.status(200).json({ post: { ...post._doc, user, comments } });
   } catch (error) {
     response.status(400).json({ message: error.message }).end();
   }
@@ -93,6 +113,7 @@ const updatePostLikes = async (request, response) => {
     await user.save();
     response.status(200).json({ message: 'Success' });
   } catch (error) {
+    console.log(error);
     response.status(400).json({ message: error.message }).end();
   }
 };
@@ -144,6 +165,7 @@ const deleteComment = async (request, response) => {
 };
 
 module.exports.getPosts = getPosts;
+module.exports.getLikedPosts = getLikedPosts;
 module.exports.createPost = createPost;
 module.exports.getPostById = getPostById;
 module.exports.updatePost = updatePost;

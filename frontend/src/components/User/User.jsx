@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './User.module.css';
 import Image from '../Common/Image/Image';
-import { AuthContext } from '../../context/userAuthContext';
-import { updateMeFriends } from '../../utils/processData';
 import Button from '../UI/Button/Button';
 import avatarMale from '../../assets/avatar_male.png';
 import avatarFemale from '../../assets/avatar_female.png';
+import { AuthContext } from '../../context/userAuthContext';
+import { fetchFollowUpdate } from '../../utils/dataFunctions';
+import styles from './User.module.css';
 
 const User = ({ user }) => {
   const {
@@ -14,6 +14,7 @@ const User = ({ user }) => {
   } = user;
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const isFriend = currentUser?.followedUsers.includes(_id);
+  const [btnDisabled, setBtntDisabled] = useState(false);
   return (
     <div className={styles.user}>
       <div className={styles.userImageContainer}>
@@ -27,19 +28,11 @@ const User = ({ user }) => {
       {currentUser && (
       <Button
         type="button"
+        disabled={btnDisabled}
         onClick={async () => {
-          const friends = [...currentUser.followedUsers];
-          if (isFriend) {
-            friends.filter((friend) => friend !== _id);
-          } else {
-            friends.push(_id);
-          }
-          const response = await updateMeFriends({ followedUsers: friends });
-          if (response.status !== 200) {
-            return false;
-          }
-          setCurrentUser({ ...currentUser, followedUsers: friends });
-          return true;
+          setBtntDisabled(true);
+          await fetchFollowUpdate(_id, currentUser, isFriend, setCurrentUser);
+          setBtntDisabled(false);
         }}
         className="btnGood"
       >

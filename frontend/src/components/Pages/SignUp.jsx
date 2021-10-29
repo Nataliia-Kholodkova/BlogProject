@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Form from '../UI/Form/Form';
+import Modal from '../UI/Modal/Modal';
 import { signup } from '../../utils/processData';
 import { signUpFields, signUpValidate, signUpInitialValues } from '../../utils/constants';
-import Modal from '../UI/Modal/Modal';
 
 const SignUp = () => {
   const [success, setSucces] = useState(null);
@@ -34,14 +34,17 @@ const SignUp = () => {
       />
       {success && (
       <Modal
-        message={success}
-        setMessage={setSucces}
+        setShowModal={setSucces}
         successAction={() => {
           hist.push('/signin');
         }}
-      />
+        isSuccess
+      >
+        <h1>{success}</h1>
+
+      </Modal>
       )}
-      {error && <Modal message={error} setMessage={setError} />}
+      {error && <Modal setShowModal={setError} isError><h1>{error}</h1></Modal>}
     </>
   );
 };

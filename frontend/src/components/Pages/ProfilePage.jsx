@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getUserPosts } from '../../utils/processData';
 import Profile from '../Profile/Profile';
 import Posts from '../Posts/Posts';
 import { AuthContext } from '../../context/userAuthContext';
+import { getUserPosts } from '../../utils/processData';
 
 const UserPage = ({ filter, setFilter }) => {
   const { currentUser } = useContext(AuthContext);

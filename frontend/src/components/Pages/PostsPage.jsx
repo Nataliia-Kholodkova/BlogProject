@@ -1,68 +1,59 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import useSortedAndSelectedPosts from '../../customHooks/usePostsSelect';
+import React, { useEffect, useState } from 'react';
 import Posts from '../Posts/Posts';
-import {
-  loadPosts, setPostsCurrentPageActionCreator,
-  updatePostLikesActionCreator, deletePostActionCreator,
-  setPostErrorActionCreator, setPostShouldLoadActionCreator,
-} from '../../redux/actionCreators/postsActionCreators';
+import { fetchData } from '../../utils/dataFunctions';
+import useSelectedPosts from '../../customHooks/usePostsSelect';
 
 const PostsContainer = ({
-  filter, setFilter, stateData, setPosts,
-  setCurrentPage, updatePostLikes, deletePost, setError,
-  setShouldLoad,
+  tag, setTag, setPostsFunction,
 }) => {
-  const {
-    posts, isLoad, currentPage, canLoad,
-    error, shouldLoad,
-  } = stateData;
+  const [isLoad, setIsLoad] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [canLoad, setCanLoad] = useState(false);
+  const [error, setError] = useState(null);
+  const [shouldLoad, setShouldLoad] = useState(true);
+  const [page, setPage] = useState(0);
+
+  const [reset, setReset] = useState(false);
+
+  if (reset) {
+    setCanLoad(false);
+    setPage(0);
+    setPosts([]);
+    setShouldLoad(true);
+    setReset(false);
+  }
 
   useEffect(() => {
-    if (shouldLoad) {
-      setPosts(currentPage);
-    }
-    setShouldLoad(true);
+    const fetch = async () => {
+      if (shouldLoad) {
+        await fetchData(setPostsFunction, page, setIsLoad, setPosts, setError, setCanLoad);
+      }
+      setShouldLoad(true);
+    };
+    fetch();
 
     return () => {
       setShouldLoad(false);
     };
-  }, [currentPage]);
-
-  const sortedAndSelectedPosts = useSortedAndSelectedPosts(posts,
-    filter.tagName,
-    filter.order);
+  }, [page]);
+  const selectedPosts = useSelectedPosts(posts, tag);
 
   return (
     <>
       <Posts
         isLoad={isLoad}
-        posts={sortedAndSelectedPosts}
-        setFilter={setFilter}
-        filter={filter}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        posts={selectedPosts}
+        setTag={setTag}
+        tag={tag}
+        currentPage={page}
+        setCurrentPage={setPage}
         canLoad={canLoad}
-        updateLikeHandler={updatePostLikes}
-        deletePost={deletePost}
         error={error}
         setError={setError}
+        setPosts={setPosts}
       />
     </>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  setPosts: (page) => dispatch(loadPosts(page)),
-  setCurrentPage: (payload) => dispatch(setPostsCurrentPageActionCreator(payload)),
-  updatePostLikes: (id, like) => dispatch(updatePostLikesActionCreator(id, like)),
-  deletePost: (id) => dispatch(deletePostActionCreator(id)),
-  setError: (error) => dispatch(setPostErrorActionCreator(error)),
-  setShouldLoad: (payload) => dispatch(setPostShouldLoadActionCreator(payload)),
-});
-
-const mapStateToProps = (state) => ({
-  stateData: state.posts,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostsContainer);
+export default PostsContainer;

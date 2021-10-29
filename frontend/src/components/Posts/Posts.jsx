@@ -5,9 +5,9 @@ import useObserver from '../../customHooks/useObserver';
 import Modal from '../UI/Modal/Modal';
 
 const Posts = ({
-  isLoad, posts, setFilter, filter,
+  isLoad, posts, setTag, tag,
   currentPage, setCurrentPage, error,
-  canLoad, updateLikeHandler, deletePost, setError,
+  canLoad, setError, setPosts, setReset,
 }) => {
   const lastElem = useRef();
   useObserver(lastElem, isLoad,
@@ -20,17 +20,18 @@ const Posts = ({
           <Post
             post={post}
             key={post._id}
-            setFilter={setFilter}
-            filter={filter}
-            updateLikeHandler={updateLikeHandler}
-            deletePost={deletePost}
+            setTag={setTag}
+            tag={tag}
+            setPosts={setPosts}
+            setError={setError}
+            setReset={setReset}
           />
         ))}
         {isLoad && <Preloader className="preloaderImage" />}
         <div className="lastDiv" ref={lastElem} />
       </>
       )}
-      {error && <Modal message={error} setMessage={setError} />}
+      {error && <Modal setShowModal={setError} isError><h1>{error}</h1></Modal>}
     </>
   );
 };

@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getPostById, createComment } from '../../utils/processData';
 import Post from '../Post/Post';
 import Comments from '../Comments/Comments';
 import Preloader from '../Common/Preloader/Preloader';
-import {
-  updatePostLikesActionCreator,
-  deletePostActionCreator,
-  updatePosts,
-} from '../../redux/actionCreators/postsActionCreators';
 import Button from '../UI/Button/Button';
 import Form from '../UI/Form/Form';
 import Modal from '../UI/Modal/Modal';
+import { getPostById, createComment } from '../../utils/processData';
+import { fetchCommentAction } from '../../utils/dataFunctions';
 
-const PostPage = ({ setFilter, updatePostLikes, deletePost }) => {
+const PostPage = ({ tag, setTag }) => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [isLoad, setLoad] = useState(false);
@@ -30,19 +25,7 @@ const PostPage = ({ setFilter, updatePostLikes, deletePost }) => {
   }, [id]);
 
   const handleSubmit = async (values) => {
-    try {
-      const response = await createComment(id, values);
-      if (response.status !== 200) {
-        setAddComment(false);
-      }
-      const createdComment = await response.data.comment;
-      post.comments.push(createdComment);
-      setPost(post);
-      updatePosts(post);
-      setAddComment(false);
-    } catch {
-      setError('Something went wrong...');
-    }
+    await fetchCommentAction(id, values, post, setPost, createComment, setAddComment, setError);
   };
 
   return (
@@ -50,9 +33,8 @@ const PostPage = ({ setFilter, updatePostLikes, deletePost }) => {
       {post && (
         <Post
           post={post}
-          setTagName={setFilter}
-          updateLikeHandler={updatePostLikes}
-          deletePost={deletePost}
+          tag={tag}
+          setTag={setTag}
           setPost={setPost}
           showButtons
           isSingle
@@ -84,19 +66,10 @@ const PostPage = ({ setFilter, updatePostLikes, deletePost }) => {
           )}
         </Post>
       )}
-      {isLoad && <Preloader />}
-      {error && <Modal message={error} setMessage={setError} />}
+      {isLoad && <Preloader className="preloaderImage" />}
+      {error && <Modal setShowModal={setError} isError><h1>{error}</h1></Modal>}
     </>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  updatePostLikes: (id, like) => dispatch(updatePostLikesActionCreator(id, like)),
-  deletePost: (id) => dispatch(deletePostActionCreator(id)),
-});
-
-const mapStateToProps = (state) => ({
-  stateData: state.posts,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostPage);
+export default PostPage;

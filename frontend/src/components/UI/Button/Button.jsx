@@ -1,10 +1,8 @@
 import React from 'react';
-// import './Button.module.css';
 import styles from './Button.module.css';
-// import classNames from 'classnames';
 
 const Button = ({
-  children, onClick, disabled, className, type, isMobile,
+  children, onClick, disabled, className, type,
 }) => {
   const onClickAction = (event) => {
     if (disabled) {
@@ -12,11 +10,6 @@ const Button = ({
       return false;
     }
     return onClick(event);
-  };
-
-  const toggleClose = (event, func) => {
-    event.target.classList.toggle(styles.close);
-    func(event);
   };
 
   const classes = ['btn', styles[className]];
@@ -27,6 +20,7 @@ const Button = ({
         <button
           className={classes.join(' ')}
           type={type}
+          disabled={disabled}
         >
           {children}
 
@@ -36,16 +30,11 @@ const Button = ({
           <button
             className={classes.join(' ')}
             onClick={(event) => {
-              if (isMobile) {
-                toggleClose(event, onClickAction);
-              } else {
-                onClickAction(event);
-              }
+              onClickAction(event);
             }}
             type={type}
           >
             {children}
-
           </button>
         )}
 

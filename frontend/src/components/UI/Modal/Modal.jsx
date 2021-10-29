@@ -1,39 +1,43 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, useEffect } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useEffect } from 'react';
 import styles from './Modal.module.css';
 
-const Modal = ({ message, setMessage, successAction }) => {
-  const [visible, setVisible] = useState(true);
+const Modal = ({ children, ...props }) => {
   const classList = [styles.modal];
-
-  if (visible) {
-    classList.push(styles.visible);
+  const {
+    setShowModal, isError, isSuccess, successAction,
+  } = props;
+  if (isError) {
+    classList.push(styles.error);
+  }
+  if (isSuccess) {
+    classList.push(styles.success);
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-      setMessage(null);
-    }, 3000);
-    return () => {
-      clearTimeout(timer);
-      if (successAction) {
-        successAction();
-      }
-    };
+    let timer;
+    if (isError || isSuccess) {
+      timer = setTimeout(() => {
+        setShowModal(null);
+        if (successAction) {
+          successAction();
+        }
+      }, 3000);
+    }
+
+    return () => clearTimeout(timer);
   });
 
   return (
-    <div
-      className={classList.join(' ')}
-      onClick={() => {
-        setVisible(false);
-      }}
-    >
-      <div className={styles.container}>
-        <h1 className={styles.error}>{message}</h1>
-      </div>
+    <div className={classList.join(' ')}>
+      <button
+        type="button"
+        onClick={() => {
+          setShowModal(false);
+        }}
+        className={styles.close}
+      />
+      {children}
     </div>
   );
 };

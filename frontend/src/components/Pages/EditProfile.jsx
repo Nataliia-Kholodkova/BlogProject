@@ -1,15 +1,16 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useContext, useState } from 'react';
 import { Convert } from 'mongo-image-converter';
 import { useHistory } from 'react-router-dom';
 import Form from '../UI/Form/Form';
-import { AuthContext } from '../../context/userAuthContext';
 import Image from '../Common/Image/Image';
-import { updateMe, updateMePhoto, deleteMe } from '../../utils/processData';
 import Button from '../UI/Button/Button';
-import { editProfileFields } from '../../utils/constants';
 import Modal from '../UI/Modal/Modal';
 import avatarMale from '../../assets/avatar_male.png';
 import avatarFemale from '../../assets/avatar_female.png';
+import { updateMe, updateMePhoto, deleteMe } from '../../utils/processData';
+import { AuthContext } from '../../context/userAuthContext';
+import { editProfileFields } from '../../utils/constants';
 
 const EditProfile = () => {
   const { currentUser, setCurrentUser, setLogedIn } = useContext(AuthContext);
@@ -60,53 +61,72 @@ const EditProfile = () => {
 
   return (
     <div className="edit">
-      <Image
-        src={image ?? (currentUser.gender === 'female' ? avatarFemale : avatarMale)}
-        alt={`${currentUser.firstName} ${currentUser.lastName}`}
-        className="userImgBig"
-      />
-      <input
-        type="file"
-        className="custom-file-input"
-        onChange={async (event) => {
-          setImage(URL.createObjectURL(event.target.files[0]));
-          let convertedImage;
-          try {
-            convertedImage = await Convert(image);
-          } catch (e) {
-            return;
+      <div className="editProfileImageContainer">
+        <Image
+          src={
+            image
+            ?? (currentUser.gender === 'female' ? avatarFemale : avatarMale)
           }
-          await updateMePhoto({ photo: convertedImage });
-        }}
-      />
-      <Button
-        onClick={async () => {
-          const response = await deleteMe();
-          if (response.status === 200) {
-            setLogedIn(false);
-            setCurrentUser(null);
-          }
-        }}
-        className="btnDeleteMe"
-        type="button"
-      >
-        Delete Profile
-      </Button>
+          alt={`${currentUser.firstName} ${currentUser.lastName}`}
+          className="userImgBig"
+        />
+        <div className="buttonsGroup">
+          <label className="editProfileImageLabel">
+            <input
+              type="file"
+              className="visually-hidden"
+              onChange={async (event) => {
+                setImage(URL.createObjectURL(event.target.files[0]));
+                let convertedImage;
+                try {
+                  convertedImage = await Convert(event.target.files[0]);
+                } catch (e) {
+                  return;
+                }
+                try {
+                  const response = await updateMePhoto({ photo: convertedImage });
+                  const { user } = await response.data;
+                  setCurrentUser(user);
+                } catch {
+                  setError('Something went wrong...');
+                }
+              }}
+            />
+            <i className="fas fa-cloud-upload-alt fa-editProfile" />
+          </label>
+          <Button
+            onClick={async () => {
+              const response = await deleteMe();
+              if (response.status === 200) {
+                setLogedIn(false);
+                setCurrentUser(null);
+              }
+            }}
+            className="btnDeleteMe"
+            type="button"
+          >
+            <i className="fas fa-user-times" />
+          </Button>
+        </div>
+      </div>
       <Form
         initialValues={initialValues}
         handleSubmit={handleSubmit}
         fields={editProfileFields}
+        className="formInline"
       />
       {success && (
-      <Modal
-        message={success}
-        setMessage={setSucces}
-        successAction={() => {
-          hist.push('/me');
-        }}
-      />
+        <Modal
+          setShowModal={setSucces}
+          successAction={() => {
+            hist.push('/me');
+          }}
+          isSuccess
+        >
+          <h1>{success}</h1>
+        </Modal>
       )}
-      {error && <Modal message={error} setMessage={setError} />}
+      {error && <Modal setShowModal={setError} isError><h1>{error}</h1></Modal>}
     </div>
   );
 };

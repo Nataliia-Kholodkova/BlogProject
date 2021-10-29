@@ -2,30 +2,65 @@
 @import '../../variables.scss';
 
 .aside {
-  position: fixed;
-  width: 320px;
-  z-index: 1;
-  padding: 8px 60px 8px 20px;
-  box-sizing: border-box;
-  left: -260px;
+  width: 100%;
   @extend %transition;
-  background-color: $bgColorLight;
 
-  &.open{
-    left: 0;
-  }
-
-  @media screen and(min-width: 768px) {
-    position: sticky;
-    position: -webkit-sticky;
-    top: 50px;
-     width: 33%;
-     padding: 8px 15px;
-  }
-
-  @media screen and(min-width: 768px) {
+  @media screen and(min-width: 960px) {
     width: 25%;
+    position: sticky;
+    top: 100px;
   }
 }
 
+.navList {
+  @extend %reset;
+  @extend %list;
+  margin: 0 auto;
+  @extend %transition;
+
+  @media screen and (min-width: 489px) {
+  }
+
+  @media screen and (min-width: 789px) {
+    // width: 60%;
+  }
+}
+
+.navItem {
+  padding: 10px;
+  border-bottom: 1px solid $borderColorGrey;
+}
+
+.navLink {
+  @extend %link;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: $fontColorLight;
+  @include fontView(14px, 500);
+  @extend %transition;
+
+  .far {
+    margin-right: 5px;
+  }
+
+  &:hover,
+  &:focus {
+    color: $colorBlue;
+    border-bottom-color: $colorBlue;
+
+    .far {
+      color: $colorBlue;
+    }
+  }
+}
+
+.active {
+  color: $colorBlue;
+  border-bottom-color: $colorBlue;
+
+  & .far {
+    color: $colorBlue;
+  }
+}
 

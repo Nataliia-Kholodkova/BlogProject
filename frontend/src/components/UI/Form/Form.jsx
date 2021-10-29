@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { useFormik } from 'formik';
 import Input from './Input';
@@ -5,18 +6,19 @@ import styles from './Form.module.css';
 import Button from '../Button/Button';
 
 const Form = ({
-  initialValues, handleSubmit, validate, fields, withSelect, withImage, setImage,
+  initialValues, handleSubmit, validate, fields, withSelect, withImage, setImage, className,
 }) => {
   const formik = useFormik({
     initialValues,
     validate,
     onSubmit: (values) => {
       handleSubmit(values);
+      formik.resetForm();
     },
   });
   return (
     <form
-      className={styles.form}
+      className={className ? styles[className] : styles.form}
       onSubmit={formik.handleSubmit}
     >
       {fields.map((field) => (
@@ -46,16 +48,19 @@ const Form = ({
       </select>
       )}
       {withImage && (
-        <input
-          className={styles['custom-file-input']}
-          type="file"
-          name="image"
-          onChange={(event) => {
-            setImage(event.target.files[0]);
-          }}
-        />
+        <label className={styles.image}>
+          <input
+            className="visually-hidden"
+            type="file"
+            name="image"
+            onChange={(event) => {
+              setImage(event.target.files[0]);
+            }}
+          />
+          <i className={`fas fa-cloud-upload-alt ${styles.far}`} />
+        </label>
       )}
-      <Button className="btnGood" type="submit">Submit</Button>
+      <Button className="btnGood" type="submit" disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0}>Submit</Button>
     </form>
   );
 };

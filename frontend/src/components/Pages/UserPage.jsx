@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUser, getUserPosts } from '../../utils/processData';
 import Profile from '../Profile/Profile';
 import Posts from '../Posts/Posts';
-import Modal from '../UI/Modal/Modal';
+import { getUser, getUserPosts } from '../../utils/processData';
 
-const UserPage = ({ filter, setFilter }) => {
+const UserPage = ({ tag, setTag }) => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [userError, setUserError] = useState('');
@@ -41,7 +40,7 @@ const UserPage = ({ filter, setFilter }) => {
   }, [page]);
 
   if (userError) {
-    return <Modal message={userError} setMessage={setUserError} />;
+    return <h1>userError</h1>;
   }
   return (
     <>
@@ -49,8 +48,8 @@ const UserPage = ({ filter, setFilter }) => {
       <>
         <Profile user={user} isLoad={isUserLoad} />
         <Posts
-          filter={filter}
-          setFilter={setFilter}
+          tag={tag}
+          setTag={setTag}
           posts={posts}
           isLoad={isPostsLoad}
           currentPage={page}

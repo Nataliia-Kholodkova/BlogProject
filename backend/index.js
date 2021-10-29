@@ -1,7 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-// const cors = require('cors');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const { dataBase } = require('./config');
@@ -13,10 +12,6 @@ const { usersRouter } = require('./routes/usersRoutes');
 const PORT = process.env.PORT || 8080;
 
 const expressApp = express();
-// expressApp.use(cors({
-//   origin: ['http://localhost:2000', 'http://localhost:3000'],
-//   credentials: true,
-// }));
 
 expressApp.use(cookieParser());
 expressApp.use(express.json({ limit: '50mb' }));

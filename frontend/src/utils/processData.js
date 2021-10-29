@@ -13,6 +13,12 @@ const getPosts = async (page) => {
   return data;
 };
 
+const getLikedPosts = async (page) => {
+  const url = `posts/liked?skip=${page * LIMIT}&limit=${LIMIT}`;
+  const data = await HTTP_AXIOS.get(url);
+  return data;
+};
+
 const getUserPosts = async (page, userId) => {
   const url = `user/posts/${userId}?skip=${page * LIMIT}&limit=${LIMIT}`;
   const data = await HTTP_AXIOS.get(url);
@@ -79,6 +85,12 @@ const getUsers = async (page) => {
   return usersData;
 };
 
+const getFollowedUsers = async (page) => {
+  const url = `users/followed?skip=${page * LIMIT}&limit=${LIMIT}`;
+  const usersData = await HTTP_AXIOS.get(url);
+  return usersData;
+};
+
 const getMe = async () => {
   const url = 'users/me';
   const usersData = await HTTP_AXIOS.get(url);
@@ -135,6 +147,7 @@ const signout = async () => {
 
 export {
   getPosts,
+  getLikedPosts,
   getUserPosts,
   getPostById,
   createPost,
@@ -146,6 +159,7 @@ export {
   deleteComment,
   getUser,
   getUsers,
+  getFollowedUsers,
   updateMePassword,
   deleteMe,
   updateMe,

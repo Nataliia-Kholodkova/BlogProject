@@ -12,6 +12,7 @@ const {
   updateComment,
   deleteComment,
   updatePostLikes,
+  getLikedPosts,
 } = require('../controllers/posts');
 const { authUser, isCommentOwner, isPostOwner } = require('../middleware/authMiddleware');
 
@@ -19,6 +20,15 @@ router.get('/api/posts',
   (request, response) => {
     try {
       getPosts(request, response);
+    } catch (error) {
+      response.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+router.get('/api/posts/liked',
+  authUser, (request, response) => {
+    try {
+      getLikedPosts(request, response);
     } catch (error) {
       response.status(500).json({ error: 'Internal server error' });
     }

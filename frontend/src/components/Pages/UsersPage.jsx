@@ -1,54 +1,44 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import Users from '../Users/Users';
-import {
-  setUsersPageActionCreator, loadUsers, setUsersErrorActionCreator, setUsersShouldLoadActionCreator,
-} from '../../redux/actionCreators/usersActionCreators';
 import Preloader from '../Common/Preloader/Preloader';
 import Modal from '../UI/Modal/Modal';
+import { fetchData } from '../../utils/dataFunctions';
 
-const UsersPage = ({
-  usersData, getUsers, setPage, setError, setShouldLoad,
-}) => {
-  const {
-    users, currentPage, error, isLoad, canLoad, shouldLoad,
-  } = usersData;
+const UsersPage = ({ setUsersFunction }) => {
+  const [isLoad, setIsLoad] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [canLoad, setCanLoad] = useState(false);
+  const [error, setError] = useState(null);
+  const [shouldLoad, setShouldLoad] = useState(true);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
-    if (shouldLoad) {
-      getUsers(currentPage);
-    }
-    setShouldLoad(true);
+    const fetch = async () => {
+      if (shouldLoad) {
+        fetchData(setUsersFunction, page, setIsLoad, setUsers, setError, setCanLoad);
+      }
+      setShouldLoad(true);
+    };
+    fetch();
 
     return () => {
       setShouldLoad(false);
     };
-  }, [currentPage]);
+  }, [page]);
 
   return (
     <>
       <Users
         users={users}
         setPage={setPage}
-        currentPage={currentPage}
+        currentPage={page}
         isLoad={isLoad}
         canLoad={canLoad}
       />
-      {isLoad && <Preloader />}
-      {error && <Modal message={error} setMessage={setError} />}
+      {isLoad && <Preloader className="preloaderImage" />}
+      {error && <Modal setShowModal={setError} isError><h1>{error}</h1></Modal>}
     </>
   );
 };
 
-const mapStateToProps = (state) => ({
-  usersData: state.users,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  getUsers: (page) => dispatch(loadUsers(page)),
-  setPage: (page) => dispatch(setUsersPageActionCreator(page)),
-  setError: (error) => dispatch(setUsersErrorActionCreator(error)),
-  setShouldLoad: (payload) => dispatch(setUsersShouldLoadActionCreator(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersPage);
+export default UsersPage;

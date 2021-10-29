@@ -2,7 +2,7 @@
 @import '../../variables.scss';
 
 .comment {
-    width: 65%;
+    width: 100%;
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -20,7 +20,7 @@
 .commentUser, .commentContent {
   display: flex;
   width: 100%;
-  padding: 10px;
+  justify-content: flex-end;
 }
 
 .commentUser {
@@ -32,7 +32,7 @@
 }
 
 .userImageContainer {
-  width: 100px;
+  width: 60px;
   margin-right: 10px;
   display: flex;
   justify-content: center;
@@ -51,14 +51,14 @@
   @extend %reset;
   text-decoration: none;
   margin-bottom: 3px;
-  @include fontView($fontSize: 18px,$fontWeight: 700);
-  color: $fontColorDark;
+  @include fontView($fontSize: 12px,$fontWeight: 700);
+  color: $colorBlue;
   @extend %transition;
 }
 
 .date {
   @extend %reset;
-  @include fontView($fontSize: 12px, $fontWeight: 300);
+  @include fontView($fontSize: 10px, $fontWeight: 300);
   font-style: italic;
 }
 
@@ -69,7 +69,7 @@
 
   &:hover {
     & .userTitle {
-      color: $colorPink;
+      color: $colorBlueDark;
     }
   }
 }
@@ -80,7 +80,7 @@
   flex-grow: 0;
   align-items: center;
   justify-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 
   @media screen and (min-width: 479px) {
     width: 60%;
@@ -100,7 +100,7 @@
 
 .buttonsContainer {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
 
   button:first-of-type{

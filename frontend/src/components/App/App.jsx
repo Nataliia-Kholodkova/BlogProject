@@ -1,24 +1,29 @@
-/* eslint-disable max-len */
 import React, { useState, useContext } from 'react';
 import styles from './App.module.css';
 import { AuthContext } from '../../context/userAuthContext';
 import Header from '../Header/Header';
 import Aside from '../Aside/Aside';
 import { PublicRoutes, PrivateRoutes } from '../../utils/routes';
+import PostCreateUpdate from '../Pages/PostCreateUpdate';
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
-  const [postFilter, setPostFilter] = useState({
-    tagName: '',
-    order: 'random',
-  });
+  const [tag, setTag] = useState('');
+  const [reset, setReset] = useState(false);
   return (
     <>
       <Header className={styles.header} />
       <div className={styles.container}>
-        <Aside className={styles.aside} filter={postFilter} setFilter={setPostFilter} />
+        <Aside className={styles.aside} currentUser={currentUser} />
         <main className={styles.main}>
-          {currentUser ? <PrivateRoutes postFilter={postFilter} setPostFilter={setPostFilter} /> : <PublicRoutes postFilter={postFilter} setPostFilter={setPostFilter} />}
+          {currentUser ? (
+            <>
+              <div className={styles.createContainer}>
+                <PostCreateUpdate formClassName="inlineForm" setReset={setReset} />
+              </div>
+              <PrivateRoutes tag={tag} setTag={setTag} reset={reset} setReset={setReset} />
+            </>
+          ) : <PublicRoutes tag={tag} setTag={setTag} />}
         </main>
       </div>
     </>

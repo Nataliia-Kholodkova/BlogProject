@@ -10,21 +10,39 @@ import PostCreateUpdate from '../components/Pages/PostCreateUpdate';
 import EditProfile from '../components/Pages/EditProfile';
 import ChangePassword from '../components/Pages/ChangePassword';
 import Profile from '../components/Profile/Profile';
+import Page404 from '../components/Pages/Page404';
+import {
+  getPosts, getLikedPosts, getUsers, getFollowedUsers,
+} from './processData';
 
-export const PrivateRoutes = ({ postFilter, setPostFilter }) => (
+export const PrivateRoutes = ({
+  tag, setTag, reset, setReset,
+}) => (
   <Switch>
     <Route
       exact
       path="/"
       render={() => (
-        <PostsPage filter={postFilter} setFilter={setPostFilter} />
+        <PostsPage
+          tag={tag}
+          setTag={setTag}
+          setPostsFunction={getPosts}
+          reset={reset}
+          setReset={setReset}
+        />
       )}
     />
     <Route
       exact
       path="/posts"
       render={() => (
-        <PostsPage filter={postFilter} setFilter={setPostFilter} />
+        <PostsPage
+          tag={tag}
+          setTag={setTag}
+          setPostsFunction={getPosts}
+          reset={reset}
+          setReset={setReset}
+        />
       )}
     />
     <Route
@@ -39,22 +57,21 @@ export const PrivateRoutes = ({ postFilter, setPostFilter }) => (
     />
     <Route
       exact
-      path="/posts/tag/:tag"
-      render={() => (
-        <PostsPage filter={postFilter} setFilter={setPostFilter} />
-      )}
+      path="/posts/:id"
+      render={() => <PostPage setTag={setTag} tag={tag} />}
     />
     <Route
       exact
-      path="/posts/:id"
-      render={() => <PostPage setFilter={setPostFilter} />}
+      path="/posts/me/liked"
+      render={() => <PostsPage setTag={setTag} tag={tag} setPostsFunction={getLikedPosts} />}
     />
-    <Route exact path="/users" render={() => <UsersPage />} />
+    <Route exact path="/users" render={() => <UsersPage setUsersFunction={getUsers} />} />
+    <Route exact path="/users/me/followed" render={() => <UsersPage setUsersFunction={getFollowedUsers} />} />
     <Route
       exact
       path="/users/:id"
       render={() => (
-        <UserPage filter={postFilter} setFilter={setPostFilter} />
+        <UserPage tag={tag} setTag={setTag} />
       )}
     />
     <Route exact path="/me" render={() => <Profile />} />
@@ -64,46 +81,34 @@ export const PrivateRoutes = ({ postFilter, setPostFilter }) => (
       path="/me/update/password"
       render={() => <ChangePassword />}
     />
+    <Route component={Page404} />
   </Switch>
 );
 
-export const PublicRoutes = ({ postFilter, setPostFilter }) => (
+export const PublicRoutes = ({ tag, setTag }) => (
   <Switch>
     <Route
       exact
       path="/"
       render={() => (
-        <PostsPage filter={postFilter} setFilter={setPostFilter} />
+        <PostsPage tag={tag} setTag={setTag} setPostsFunction={getPosts} />
       )}
     />
     <Route
       exact
       path="/posts"
       render={() => (
-        <PostsPage filter={postFilter} setFilter={setPostFilter} />
-      )}
-    />
-    <Route
-      exact
-      path="/posts/tag/:tag"
-      render={() => (
-        <PostsPage filter={postFilter} setFilter={setPostFilter} />
+        <PostsPage tag={tag} setTag={setTag} setPostsFunction={getPosts} />
       )}
     />
     <Route
       exact
       path="/posts/:id"
-      render={() => <PostPage setFilter={setPostFilter} />}
+      render={() => <PostPage tag={tag} setTag={setTag} />}
     />
-    <Route exact path="/users" render={() => <UsersPage />} />
-    <Route
-      exact
-      path="/users/:id"
-      render={() => (
-        <UserPage filter={postFilter} setFilter={setPostFilter} />
-      )}
-    />
+    <Route exact path="/users" render={() => <UsersPage setUsersFunction={getUsers} />} />
     <Route exact path="/signin" render={() => <SignIn />} />
     <Route exact path="/signup" render={() => <SignUp />} />
+    <Route component={Page404} />
   </Switch>
 );

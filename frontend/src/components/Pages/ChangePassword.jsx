@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Form from '../UI/Form/Form';
-import { updateMePassword } from '../../utils/processData';
 import Modal from '../UI/Modal/Modal';
+import { updateMePassword } from '../../utils/processData';
 import { changePasswordFields, changePasswordInitialValues, changePasswordValidate } from '../../utils/constants';
 
 const ChangePassword = () => {
@@ -34,14 +34,16 @@ const ChangePassword = () => {
       />
       {success && (
       <Modal
-        message={success}
-        setMessage={setSucces}
+        setShowModal={setSucces}
         successAction={() => {
           hist.push('/me');
         }}
-      />
+        isSuccess
+      >
+        <h1>{success}</h1>
+      </Modal>
       )}
-      {error && <Modal message={error} setMessage={setError} />}
+      {error && <Modal setShowModal={setError} isError><h1>{error}</h1></Modal>}
     </>
   );
 };

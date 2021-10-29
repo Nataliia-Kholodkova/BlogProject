@@ -13,6 +13,18 @@ const getUsers = async (request, response) => {
   }
 };
 
+const getFollowedUsers = async (request, response) => {
+  const { limit, skip } = request.query;
+  try {
+    const user = await User.findById(request.userId);
+    const users = await User
+      .find({ _id: { $in: user.followedUsers } }).limit(+limit ?? 0).skip(+skip ?? 0) ?? [] ?? [];
+    response.status(200).json({ users: Array.from(users).map((usr) => mapUser(usr)) });
+  } catch (error) {
+    response.status(400).json({ error: error.message }).end();
+  }
+};
+
 const getUser = async (request, response) => {
   const { id } = request.params;
   try {
@@ -29,3 +41,4 @@ const getUser = async (request, response) => {
 
 module.exports.getUsers = getUsers;
 module.exports.getUser = getUser;
+module.exports.getFollowedUsers = getFollowedUsers;

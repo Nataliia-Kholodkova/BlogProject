@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Convert } from 'mongo-image-converter';
-import { createPostActionCreator, updatePostActionCreator } from '../../redux/actionCreators/postsActionCreators';
 import Form from '../UI/Form/Form';
 import Modal from '../UI/Modal/Modal';
+import { updatePost, createPost } from '../../utils/processData';
 
-const PostCreateUpdate = ({
-  posts,
-  createPost,
-  updatePost,
-}) => {
-  const { id } = useParams();
+const PostCreateUpdate = ({ currentPost, formClassName, setReset }) => {
   const hist = useHistory();
-  const currentPost = id ? posts.find((post) => post._id === id) : null;
   const [image, setImage] = useState(currentPost?.image ?? null);
   const [success, setSucces] = useState(null);
   const [error, setError] = useState(null);
+
   const fields = [
     {
       name: 'text',
@@ -59,12 +53,15 @@ const PostCreateUpdate = ({
     const formData = { ...values, image: convertedImage };
     formData.tags = formData.tags.split(' ');
     try {
-      if (id) {
-        await updatePost(id, formData);
+      if (currentPost) {
+        await updatePost(currentPost._id, formData);
       } else {
         await createPost(formData);
       }
       setSucces('Success!');
+      if (setReset) {
+        setReset(true);
+      }
     } catch {
       setError('Something went wrong...');
     }
@@ -79,28 +76,23 @@ const PostCreateUpdate = ({
         fields={fields}
         withImage
         setImage={setImage}
+        className={formClassName}
       />
       {success && (
       <Modal
-        message={success}
-        setMessage={setSucces}
+        setShowModal={setSucces}
         successAction={() => {
-          hist.goBack();
+          hist.push('/posts');
         }}
-      />
+        isSuccess
+      >
+        <h1>{success}</h1>
+
+      </Modal>
       )}
       {error && <Modal message={error} setMessage={setError} />}
     </>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  createPost: (data) => dispatch(createPostActionCreator(data)),
-  updatePost: (id, data) => dispatch(updatePostActionCreator(id, data)),
-});
-
-const mapStateToProps = (state) => ({
-  posts: state.posts.posts,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostCreateUpdate);
+export default PostCreateUpdate;

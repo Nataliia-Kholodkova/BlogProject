@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AuthContext } from '../../context/userAuthContext';
 import Form from '../UI/Form/Form';
+import Modal from '../UI/Modal/Modal';
 import { signin } from '../../utils/processData';
 import { signInInitialValues, signInValidate, signInFields } from '../../utils/constants';
-import Modal from '../UI/Modal/Modal';
+import { AuthContext } from '../../context/userAuthContext';
 
 const SignIn = () => {
   const { setLogedIn } = useContext(AuthContext);
@@ -16,7 +16,6 @@ const SignIn = () => {
     try {
       const response = await signin(values);
       if (response.status === 200) {
-        setLogedIn(true);
         setSucces('You are successfully loged in');
       } else {
         setError('Something went wrong...');
@@ -36,14 +35,17 @@ const SignIn = () => {
       />
       {success && (
       <Modal
-        message={success}
-        setMessage={setSucces}
+        setShowModal={setSucces}
         successAction={() => {
-          hist.goBack();
+          setLogedIn(true);
+          hist.push('/posts');
         }}
-      />
+        isSuccess
+      >
+        <h1>{success}</h1>
+      </Modal>
       )}
-      {error && <Modal message={error} setMessage={setError} />}
+      {error && <Modal setShowModal={setError} isError><h1>{error}</h1></Modal>}
     </>
   );
 };

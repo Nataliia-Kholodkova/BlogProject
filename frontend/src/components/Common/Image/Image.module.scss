@@ -37,7 +37,7 @@
 .likesImg {
   width: 16px;
   height: 16px;
-  fill: $colorPink;
+  fill: $colorRed;
 }
 
 .like {
@@ -49,15 +49,15 @@
   @extend %transition;
 
   &:hover {
-    fill: $colorPink;
+    fill: $colorRedDark;
     & + span {
-      color: $colorPink;
+      color: $colorRedDark;
     }
   }
 }
 
 .liked {
-  fill: $colorPink;
+  fill: $colorRed;
 
   &:hover {
     fill: $bgColorLight;
@@ -65,4 +65,8 @@
       color: $bgColorLight;
     }
   }
+}
+
+.imgError {
+  margin: 0 auto 20px;
 }

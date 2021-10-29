@@ -3,6 +3,7 @@
 
 .tagList {
   @extend %list;
+  @extend %reset;
   width: 100%;
   padding: 10px;
   display: flex;
@@ -10,44 +11,16 @@
   flex-wrap: wrap;
 }
 
-.tagItem {
-  margin: 10px;
-}
-
 .tagItemSmall {
   margin: 0 4px;
   margin-bottom: 5px;
 }
 
-.tagLink,
 .tagLinkSmall {
   @extend %link;
   color: $fontColorWhite;
   text-align: center;
-  background-color: rgba($colorPink, 0.8);
-  @extend %transition;
-
-  &:hover,&:focus {
-    background-color: $colorPink;
-  }
-
-  &:active {
-    background-color: rgba($colorPink, 0.5);
-  }
-}
-
-.tagLink {
-  padding: 15px;
-  box-shadow: 2px 2px 5px rgb(0 0 0 / 40%);
-  @include fontView(16px,500);
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
-}
-
-.tagLinkSmall {
+  background-color: $colorBlue;
   padding: 5px;
   @include fontView(12px,500);
   border-radius: 3px;
@@ -55,4 +28,13 @@
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
+  @extend %transition;
+
+  &:hover,&:focus {
+    background-color: $colorBlueDark;
+  }
+}
+
+.current {
+  background-color: $colorBlueDark;
 }

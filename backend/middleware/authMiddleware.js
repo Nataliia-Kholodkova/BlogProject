@@ -40,7 +40,7 @@ const authUser = async (request, response, next) => {
 const isPostOwner = async (request, response, next) => {
   const { id } = request.params;
   const post = await Post.findById(id);
-  if (post.ownerUid !== request.userId.toString()) {
+  if (post?.ownerUid !== request.userId.toString()) {
     return response.status(400).json({ message: 'Post does not belong to user' }).end();
   }
   next();
@@ -49,7 +49,7 @@ const isPostOwner = async (request, response, next) => {
 const isCommentOwner = async (request, response, next) => {
   const { id } = request.params;
   const comment = await Comment.findById(id);
-  if (comment.ownerUid !== request.userId.toString()) {
+  if (comment?.ownerUid !== request.userId.toString()) {
     return response.status(400).json({ message: 'Comment does not belong to user' }).end();
   }
   next();

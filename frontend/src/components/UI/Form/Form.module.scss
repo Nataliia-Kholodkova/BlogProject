@@ -1,30 +1,30 @@
 @import '../../../mixins.scss';
 @import '../../../variables.scss';
 
-.form {
+.columnForm {
   background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  box-shadow: 1px 1px 10px rgba($bgColorDark, 0.3);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.inlineForm {
+  margin: 0 auto;
 }
 
 .inputForText {
   width: 100%;
   padding: 5px;
   border-bottom: 1px solid $bgColorDark;
-  color: $fontColorDark;
+  color: $fontColorLight;
   @extend %transition;
 
   &::placeholder {
-    color: $fontColorDark;
+    color: $fontColorLight;
   }
 
   &.error {
-    border-bottom-color: $colorPink;
+    border-bottom-color: $colorRedDark;
   }
 }
 
@@ -35,7 +35,7 @@
 }
 
 .errorSpan {
-  color: $colorPink;
+  color: $colorRedDark;
   @include fontView(10px);
   font-style: italic;
 }
@@ -139,3 +139,35 @@
 .custom-file-input:active::before {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
+
+.inlineForm {
+  margin: 0 auto 30px;
+  padding: 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (min-width: 960px) {
+    .labelForText {
+      width: 30%;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.far {
+  font-size: 30px;
+  color: $colorGreen;
+  @extend %transition;
+
+  &:hover {
+    color: $colorGreenDark
+  }
+}
+
+.image {
+  cursor: pointer;
+}
+
+

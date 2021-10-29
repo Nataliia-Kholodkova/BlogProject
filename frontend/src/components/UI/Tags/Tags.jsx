@@ -1,16 +1,16 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './Tags.module.css';
 
 const Tags = ({
-  tagList, onClick, itemStyle, linkStyle,
+  tagList, onClick, currentTag,
 }) => (
   <ul className={styles.tagList}>
     {tagList.map((tag) => (
-      <li key={`${tag}`} className={styles[itemStyle]}>
-        <NavLink to={`/posts/tag/${tag}`} className={styles[linkStyle]} onClick={(event) => onClick(event, tag)}>
+      <li key={`${tag}`} className={`${styles.tagItemSmall} ${currentTag === tag ? `${styles.current}` : ''}`}>
+        <Link to="/" className={styles.tagLinkSmall} onClick={(event) => onClick(event, tag)}>
           {tag}
-        </NavLink>
+        </Link>
       </li>
     ))}
   </ul>
