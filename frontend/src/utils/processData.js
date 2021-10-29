@@ -3,7 +3,7 @@ import * as axios from 'axios';
 const LIMIT = 10;
 
 const HTTP_AXIOS = axios.create({
-  baseURL: 'http://localhost:8080/api/',
+  baseURL: 'https://like-twitter-like.herokuapp.com/api/',
   withCredentials: true,
 });
 
